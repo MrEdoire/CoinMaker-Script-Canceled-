@@ -29,7 +29,6 @@ class Backtest:
 
         # Used for analysis
         self.start_wallet = self.usdt
-
         # - - - - - - - - - - - - - -
 
         self.get_historical_datas()

@@ -19,10 +19,11 @@ class Backtest:
         self.fees = float(self.client.get_trade_fee(symbol=self.currency)[0]['takerCommission'])
 
         self.usdt = 500
+        self.start_wallet = self.usdt
         self.coin = 0
         self.stop_loss = 0.05
         self.take_profit = 0.15
-        self.to_invest = self.usdt * 0.1   # % of the wallet to invest
+        self.to_invest =  1   # % of the wallet to invest (1 = 100%)
 
         self.reload_currency_data = False   # Need to be True to apply any changes in settings
 
@@ -108,9 +109,13 @@ class Backtest:
     def buy_currency(self, index):
         self.buy_price = self.df['close'][index]
 
-        self.coin += (self.to_invest / self.df['close'][index])
+        # Update amount to invest
+        self.investment = self.usdt * self.to_invest
+
+        # Make the transaction
+        self.coin += (self.investment / self.df['close'][index])
         self.coin -= self.coin * self.fees
-        self.usdt -= self.to_invest
+        self.usdt -= self.investment
 
         self.is_buy = True
 
@@ -119,6 +124,7 @@ class Backtest:
     def sell_currency(self, index):
         self.sell_price = self.df['close'][index]
 
+        # Make the transaction
         self.usdt += self.coin * self.df['close'][index]
         self.usdt -= self.usdt * self.fees
         self.coin = 0
@@ -166,8 +172,7 @@ class Backtest:
         print(f"Winrate : {(self.win * 100) / (self.win + self.loss)} %")
         print()
         print(f"Profit : {self.usdt}  USDT")
-        print(f"Buy & Hold Profit : {(self.to_invest / self.df['close'].iloc[0]) * self.df['close'].iloc[-1]} USDT")
-
+        print(f"Buy & Hold Profit : {((self.start_wallet * self.to_invest) / self.df['close'].iloc[0]) * self.df['close'].iloc[-1]} USDT")
 
 backtest = Backtest()
 

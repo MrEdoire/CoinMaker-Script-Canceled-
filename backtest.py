@@ -23,7 +23,7 @@ class Backtest:
         self.coin = 0
         self.stop_loss = 0.05
         self.take_profit = 0.15
-        self.to_invest =  1   # % of the wallet to invest (1 = 100%)
+        self.to_invest = 1   # % of the wallet to invest (1 = 100%)
 
         self.reload_currency_data = False   # Need to be True to apply any changes in settings
 
@@ -181,4 +181,3 @@ def chart():
     for i in indicators_list:
         plt.plot(backtest.df['timestamp'], backtest.df[i])
     plt.show()
-

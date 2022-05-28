@@ -10,7 +10,7 @@ pip install -r requirements.txt
 ## Upcoming features :
 - A fully working backtest program with data analysis
 - The bot itself that could make trades on Binance 24/7
-- A complete tracking of the bot performances on a website
+- A complete tracking of the bot performances over time
 
 ## Backtest basic settings
 
@@ -39,7 +39,7 @@ self.start_wallet = self.usdt
 # - - - - - - - - - - - - - -
 ```
 
-To apply your changes make sure to set `self.reload_currency_data` as `True` at least once. It will
+Make sure to set `self.reload_currency_data` as `True` everytime you change something. It will
 get the data of your currency with the modified settings and return them in the [data.csv](data.csv) file. Then, you
 can  set the variable to `False` as the program will use the csv file to process.
 
@@ -55,7 +55,7 @@ FutureWarning: The default dtype for empty Series will be 'object' instead of 'f
   self._psar_down = pd.Series(index=self._psar.index)
 ```
 To fix it, you need to go to the trend.py file of your `ta` package and find the following 
-functions (line 931):
+function (line 931):
 
 ```python
 def _run(self):  # noqa
@@ -69,7 +69,7 @@ def _run(self):  # noqa
     self._psar_down = pd.Series(index=self._psar.index)
 ```
 
-Then, you simply have to add `dtype='object'`in the parameters of the `self._psar_up` and
+Then, you simply have to add `dtype='object'` in the parameters of the `self._psar_up` and
 `self._psar_down` variables :
 
 ```python

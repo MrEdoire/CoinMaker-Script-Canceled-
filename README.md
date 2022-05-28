@@ -40,7 +40,7 @@ self.start_wallet = self.usdt
 ```
 
 Make sure to set `self.reload_currency_data` as `True` everytime you change something. It will
-get the data of your currency with the modified settings and return them in the [data.csv](data.csv) file. Then, you
+get the data of your currency with the modified settings and return them in the [data.csv](backtest/data.csv) file. Then, you
 can  set the variable to `False` as the program will use the csv file to process.
 
 ## Known issue

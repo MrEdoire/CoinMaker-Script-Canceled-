@@ -1,5 +1,5 @@
 
-# Daytrading-Crypto-Bot
+# CoinMaker
 
 An easy-to-use Bot that trades crypto using [Binance's](https://www.binance.com/en) API.
 

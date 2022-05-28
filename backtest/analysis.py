@@ -1,29 +1,30 @@
 from strategy import *
 
-class Analysis:
+class Analysis(Strategy):
 
     def __init__(self):
+        super().__init__()
 
         print()
-        print(f"Currency : {Settings.currency}")
-        print(f"Interval : {Settings.interval}")
-        print(f"Start wallet : {Settings.start_wallet}")
+        print(f"Currency : {self.currency}")
+        print(f"Interval : {self.interval}")
+        print(f"Start wallet : {self.start_wallet}")
 
-        if Settings.end_period != None:
-            print(f"From {Settings.start_period} to {Settings.end_period}")
+        if self.end_period != None:
+            print(f"From {self.start_period} to {self.end_period}")
         else:
-            print(f"From {Settings.start_period} to today")
+            print(f"From {self.start_period} to today")
 
         print("- - - - - - - - - - ")
-        print(f"Stop loss % : {Settings.stop_loss}")
-        print(f"Take profit % : {Settings.take_profit}")
+        print(f"Stop loss % : {self.stop_loss}")
+        print(f"Take profit % : {self.take_profit}")
 
         print("- - - - - - - - - - ")
 
-        print(f"Win : {Strategy.win} ; Loss {Strategy.loss}")
-        print(f"Winrate : {(Strategy.win * 100) / (Strategy.win + Strategy.loss)} %")
+        print(f"Win : {self.win} ; Loss {self.loss}")
+        print(f"Winrate : {(self.win * 100) / (self.win + self.loss)} %")
         print()
-        print(f"Profit : {Settings.usdt}  USDT")
-        print(f"Buy & Hold Profit : {((Settings.start_wallet * Settings.to_invest) / Data.df['close'].iloc[0]) * Data.df['close'].iloc[-1]} USDT")
+        print(f"Profit : {self.usdt}  USDT")
+        print(f"Buy & Hold Profit : {((self.start_wallet * self.to_invest) / self.df['close'].iloc[0]) * self.df['close'].iloc[-1]} USDT")
 
 Analysis = Analysis()

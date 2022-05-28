@@ -17,5 +17,3 @@ class Settings:
         self.to_invest = 1   # % of the wallet to invest (1 = 100%)
 
         self.reload_currency_data = False
-
-Settings = Settings()

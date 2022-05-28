@@ -2,25 +2,25 @@ from settings import *
 from api import *
 import pandas as pd
 
-class GetData:
+class GetData(Settings):
 
     def __init__(self):
-
+        super(GetData, self).__init__()
         self.client = Client(api_key, api_secret)
 
-        self.fees = float(self.client.get_trade_fee(symbol=Settings.currency)[0]['takerCommission'])
+        self.fees = float(self.client.get_trade_fee(symbol=self.currency)[0]['takerCommission'])
 
         # Used for analysis
-        self.start_wallet = Settings.usdt
+        self.start_wallet = self.usdt
 
         self.get_historical_data()
 
     def get_historical_data(self):
         # Get a dataframe from the chosen currency
-        if Settings.reload_currency_data is True:
+        if self.reload_currency_data is True:
             # Get from the Binance API all the historical data of the chosen currency
-            self.create_data_frame(Client().get_historical_klines(Settings.currency, Settings.interval,
-                                                                  Settings.start_period, Settings.end_period))
+            self.create_data_frame(Client().get_historical_klines(self.currency, self.interval,
+                                                                  self.start_period, self.end_period))
             self.df.to_csv('data.csv')
         else:
             # Use the data.csv to get the data of the chosen currency
@@ -46,5 +46,3 @@ class GetData:
             self.df[i] = pd.to_numeric(self.df[i])
 
 Data = GetData()
-
-

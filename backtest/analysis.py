@@ -1,4 +1,5 @@
 from strategy import *
+from matplotlib import pyplot as plt
 
 class Analysis(Strategy):
 
@@ -21,10 +22,14 @@ class Analysis(Strategy):
 
         print("- - - - - - - - - - ")
 
+        print(f"Trades : {self.win + self.loss}")
         print(f"Win : {self.win} ; Loss {self.loss}")
         print(f"Winrate : {(self.win * 100) / (self.win + self.loss)} %")
         print()
         print(f"Profit : {self.usdt}  USDT")
         print(f"Buy & Hold Profit : {((self.start_wallet * self.to_invest) / self.df['close'].iloc[0]) * self.df['close'].iloc[-1]} USDT")
+
+        plt.plot(self.plt_time, self.plt_wallet)
+        plt.show()
 
 Analysis = Analysis()

@@ -23,9 +23,8 @@ self.start_period = '01 January 2021'
 self.end_period = None
 
 self.usdt = 500
-self.start_wallet = self.usdt
 self.coin = 0
-self.stop_loss = 0.05
+self.stop_loss = 0.10
 self.take_profit = 0.15
 self.to_invest = 1   # % of the wallet to invest (1 = 100%)
 

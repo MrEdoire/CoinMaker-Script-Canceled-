@@ -44,5 +44,3 @@ class GetData(Settings):
         self.to_numeric = ['close', 'high', 'low', 'open']
         for i in self.to_numeric:
             self.df[i] = pd.to_numeric(self.df[i])
-
-Data = GetData()

@@ -11,29 +11,35 @@ class Strategy(GetData):
         self.win = 0
         self.loss = 0
 
+        # Used for charts
+        self.plt_time = []
+        self.plt_wallet = []
+
         # Is used to prevent the bot from buying when it already bought some crypto
         self.is_buy = False
 
         # The strategy that we use to buy / sell our currency
         for index, row in self.df.iterrows():
-            if self.is_buy is False and pd.isna(self.df['EMA 250'][index]) is False:
+
+            if self.is_buy is False and pd.isna(self.df['EMA 80'][index]) is False:
                 # Our conditions to buy
-                if self.df['EMA 250'][index] < self.df['close'][index] and \
-                    self.df['MACD Line'][index] > self.df['MACD Signal'][index] and \
-                    self.df['Ichimoku A'][index] >  self.df['Ichimoku B'][index] and \
-                    pd.isna(self.df['Parabolic SAR Down'][index]) is False:
+                if self.df['EMA 400'][index] < self.df['close'][index] and \
+                    self.df['MACD Line'][index] > self.df['MACD Signal'][index]:
                     self.buy_currency(index)
 
             elif self.is_buy is True and self.coin > 0:
                 # Our conditions to sell.
                 if self.df['close'][index] >= self.buy_price + (self.buy_price * self.take_profit):
                     self.sell_currency(index)
-                elif Data.df['close'][index] <= self.buy_price - (self.buy_price * self.stop_loss):
+                elif self.df['close'][index] <= self.buy_price - (self.buy_price * self.stop_loss):
+                    self.sell_currency(index)
+                elif self.df['MACD Line'][index] < self.df['MACD Signal'][index]:
                     self.sell_currency(index)
 
     def import_indicators(self, high, low, close):
         # Add all the needed indicators into the Data Frame
-        self.df['EMA 250'] = ta.trend.ema_indicator(close=self.df['close'], window=250)
+        self.df['EMA 80'] = ta.trend.ema_indicator(close=close, window=80)
+        self.df['EMA 400'] = ta.trend.ema_indicator(close=close, window=400)
 
         self.df['Ichimoku A'] = ta.trend.ichimoku_a(high=high, low=low)
         self.df['Ichimoku B'] = ta.trend.ichimoku_b(high=high, low=low)
@@ -44,14 +50,14 @@ class Strategy(GetData):
         self.df['MACD Signal'] = ta.trend.macd_signal(close=close)
 
     def buy_currency(self, index):
-        self.buy_price = Data.df['close'][index]
+        self.buy_price = self.df['close'][index]
 
         # Update amount to invest
         self.investment = self.usdt * self.to_invest
 
         # Make the transaction
-        self.coin += (self.investment / self.df['close'][index])
-        self.coin -= self.coin * self.fees
+        self.coin += self.investment / self.df['close'][index]
+        self.coin -= (self.investment / self.df['close'][index]) * self.fees
         self.usdt -= self.investment
 
         self.is_buy = True
@@ -63,8 +69,11 @@ class Strategy(GetData):
 
         # Make the transaction
         self.usdt += self.coin * self.df['close'][index]
-        self.usdt -= self.usdt * self.fees
+        self.usdt -= (self.coin * self.df['close'][index]) * self.fees
         self.coin = 0
+
+        self.plt_time.append(self.df['timestamp'][index])
+        self.plt_wallet.append(self.usdt)
 
         self.is_buy = False
 

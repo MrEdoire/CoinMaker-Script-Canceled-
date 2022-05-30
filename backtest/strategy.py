@@ -14,6 +14,9 @@ class Strategy(GetData):
         # Used for charts
         self.plt_time = []
         self.plt_wallet = []
+        self.plt_currency = []
+        self.plt_macd_line = []
+        self.plt_macd_signal = []
 
         # Is used to prevent the bot from buying when it already bought some crypto
         self.is_buy = False
@@ -21,9 +24,9 @@ class Strategy(GetData):
         # The strategy that we use to buy / sell our currency
         for index, row in self.df.iterrows():
 
-            if self.is_buy is False and pd.isna(self.df['EMA 80'][index]) is False:
+            if self.is_buy is False and pd.isna(self.df['EMA 100'][index]) is False:
                 # Our conditions to buy
-                if self.df['EMA 400'][index] < self.df['close'][index] and \
+                if self.df['EMA 100'][index] < self.df['close'][index] and \
                     self.df['MACD Line'][index] > self.df['MACD Signal'][index]:
                     self.buy_currency(index)
 
@@ -33,13 +36,10 @@ class Strategy(GetData):
                     self.sell_currency(index)
                 elif self.df['close'][index] <= self.buy_price - (self.buy_price * self.stop_loss):
                     self.sell_currency(index)
-                elif self.df['MACD Line'][index] < self.df['MACD Signal'][index]:
-                    self.sell_currency(index)
 
     def import_indicators(self, high, low, close):
         # Add all the needed indicators into the Data Frame
-        self.df['EMA 80'] = ta.trend.ema_indicator(close=close, window=80)
-        self.df['EMA 400'] = ta.trend.ema_indicator(close=close, window=400)
+        self.df['EMA 100'] = ta.trend.ema_indicator(close=close, window=100)
 
         self.df['Ichimoku A'] = ta.trend.ichimoku_a(high=high, low=low)
         self.df['Ichimoku B'] = ta.trend.ichimoku_b(high=high, low=low)
@@ -74,6 +74,9 @@ class Strategy(GetData):
 
         self.plt_time.append(self.df['timestamp'][index])
         self.plt_wallet.append(self.usdt)
+        self.plt_currency.append(self.df['close'][index])
+        self.plt_macd_line.append(self.df['MACD Line'][index])
+        self.plt_macd_signal.append(self.df['MACD Signal'][index])
 
         self.is_buy = False
 

@@ -30,6 +30,9 @@ class Analysis(Strategy):
         print(f"Buy & Hold Profit : {((self.start_wallet * self.to_invest) / self.df['close'].iloc[0]) * self.df['close'].iloc[-1]} USDT")
 
         plt.plot(self.plt_time, self.plt_wallet)
+        plt.plot(self.plt_time, self.plt_currency)
+        plt.plot(self.plt_time, self.plt_macd_line)
+        plt.plot(self.plt_time, self.plt_macd_signal)
         plt.show()
 
 Analysis = Analysis()
